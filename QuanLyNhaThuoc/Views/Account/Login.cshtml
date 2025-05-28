@@ -1,0 +1,72 @@
+﻿@{
+    string returnUrl = ViewData["ReturnUrl"] as string ?? string.Empty;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/LoginAd.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-form col-md-4">
+            <h2 class="text-center">Đăng Nhập</h2>
+
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+
+            <form method="post" action="/Account/Login" onsubmit="return validateForm()">
+                <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+                <div class="form-group">
+                    <label for="username">Tài khoản</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tên đăng nhập" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu" required />
+                </div>
+
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">Nhớ tài khoản</label>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        function validateForm() {
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (username === "" || password === "") {
+                alert("Vui lòng nhập tên đăng nhập và mật khẩu.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

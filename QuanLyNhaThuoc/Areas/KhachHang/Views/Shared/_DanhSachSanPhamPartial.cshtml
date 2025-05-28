@@ -1,0 +1,91 @@
+﻿@model IEnumerable<QuanLyNhaThuoc.Areas.KhachHang.Models.ProductViewModel>
+<link rel="stylesheet" href="~/css/layotsanpham.css" asp-append-version="true" />
+
+<div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @{
+            int productCount = Model.Count();
+            int itemsPerSlide = 5;
+            int slideIndex = 0;
+        }
+
+        @foreach (var batch in Model.Chunk(itemsPerSlide))
+        {
+            <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
+                <div class="row">
+                    @foreach (var product in batch)
+                    {
+                        <div class="col-md-2 col-lg-2">
+                            <div class="product-item card">
+                                <a href="@Url.Action("Chitietsp", "SanPham", new { area = "KhachHang", id = product.MaThuoc })">
+                                    <img src="@product.HinhAnhDauTien" alt="@product.TenThuoc" class="card-img-top product-image" />
+                                </a>
+
+                                <div class="card-body">
+                                    <h5 class="card-title text-left">@product.TenThuoc</h5>
+                                    <p class="price" style="color: @(product.DonGia > 100000 ? "#e74c3c" : "#27ae60");">
+                                        @string.Format("{0:#,##0}", product.DonGia)₫/@product.DonVi
+                                    </p>
+
+                                    <button class="btn btn-primary add-to-cart" data-product-id="@product.MaThuoc" @(product.SoLuongTon == 0 ? "disabled" : "")>
+                                        @if (product.SoLuongTon == 0)
+                                        {
+                                            <span>Hết hàng</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Thêm vào giỏ thuốc</span>
+                                        }
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            slideIndex++;
+        }
+    </div>
+
+    <!-- Carousel Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".add-to-cart").off('click').on('click', function () {
+            var productId = $(this).data("product-id");
+            var quantity = 1;
+
+            $.ajax({
+                url: '/KhachHang/SanPham/AddToCart',
+                type: 'POST',
+                data: { maThuoc: productId, soLuong: quantity },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                    } else {
+                        if (response.redirectToLogin) {
+                            window.location.href = response.loginUrl;
+                        } else {
+                            alert("Thêm vào giỏ hàng thất bại: " + response.message);
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert("Có lỗi xảy ra: " + error);
+                }
+            });
+        });
+    });
+
+    </script>

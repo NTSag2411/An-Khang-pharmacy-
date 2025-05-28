@@ -1,0 +1,88 @@
+﻿@model List<QuanLyNhaThuoc.ViewModels.DonHangViewModel>
+
+  <style>
+    /* Nút "Xem chi tiết" */
+    .order-detail-btn {
+        background-color: #28a745; /* Màu xanh lá */
+        border: none;
+        color: white;
+        padding: 6px 12px;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .order-detail-btn:hover {
+            background-color: #218838; /* Màu xanh lá đậm hơn khi hover */
+        }
+
+        /* Thêm các hiệu ứng nếu cần */
+        .order-detail-btn:focus {
+            box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+            outline: none;
+        }
+
+  </style>
+
+@{
+    ViewBag.Title = "Danh sách đơn hàng";
+}
+
+<h2>Danh sách đơn hàng</h2>
+
+@if (!Model.Any())
+{
+    <p>Không có đơn hàng nào.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Trạng thái</th>
+                <th>Chi tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var donHang in Model)
+            {
+                <tr>
+                    <td>@donHang.MaDonHang</td>
+                    <td>@donHang.NgayDatHang.ToString("dd/MM/yyyy")</td>
+                    <td>@donHang.TongTien₫</td>
+                    <td>@donHang.TrangThai</td>
+                    <td>
+                        <button class="btn order-detail-btn" data-bs-toggle="collapse" data-bs-target="#chiTiet-@donHang.MaDonHang">
+                            Xem chi tiết
+                        </button>
+                        <div id="chiTiet-@donHang.MaDonHang" class="collapse mt-2">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên thuốc</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var chiTiet in donHang.ChiTietDonHang)
+                                    {
+                                        <tr>
+                                            <td>@chiTiet.TenThuoc</td>
+                                            <td>@chiTiet.SoLuong</td>
+                                            <td>@chiTiet.Gia₫</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

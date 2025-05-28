@@ -1,0 +1,86 @@
+﻿@model QuanLyNhaThuoc.Models.Thuoc
+
+<div class="container mt-5 p-4 border rounded shadow-sm bg-light">
+    <h2 class="text-center mb-4">Thêm Thuốc Mới</h2>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <!-- Tên Thuốc Field -->
+        <div class="form-group mb-3">
+            <label asp-for="TenThuoc" class="form-label">Tên Thuốc</label>
+            <input asp-for="TenThuoc" class="form-control" placeholder="Nhập tên thuốc" required />
+            <span asp-validation-for="TenThuoc" class="text-danger"></span>
+        </div>
+
+        <!-- Hạn Sử Dụng Field -->
+        <div class="form-group mb-3">
+            <label asp-for="HanSuDung" class="form-label">Hạn Sử Dụng</label>
+            <input asp-for="HanSuDung" type="date" class="form-control" required />
+            <span asp-validation-for="HanSuDung" class="text-danger"></span>
+        </div>
+
+        <!-- Đơn Vị Field -->
+        <div class="form-group mb-3">
+            <label asp-for="DonVi" class="form-label">Đơn Vị</label>
+            <select asp-for="DonVi" class="form-select" required>
+                <option value="">-- Chọn Đơn Vị --</option>
+                <option value="Hộp">Hộp</option>
+                <option value="Chai">Chai</option>
+                <option value="Ống">Ống</option>
+                <option value="Lon">Lon</option>
+                <option value="Tuýp">Tuýp</option>
+                <option value="Hủ">Hủ</option>
+                <option value="Gói">Gói</option>
+                <option value="Túi">Túi</option>
+                <option value="Cái">Cái</option>
+                <option value="Lọ">Lọ</option>
+                <option value="Viên">Viên</option>
+                <option value="Miếng">Miếng</option>
+                <option value="Cuộn">Cuộn</option>
+                <option value="Bịch">Bịch</option>
+                <option value="Đôi">Đôi</option>
+                <option value="Cây">Cây</option>
+                <option value="Chiếc">Chiếc</option>
+                <option value="Bộ">Bộ</option>
+                <option value="Vỉ">Vỉ</option>
+            </select>
+            <span asp-validation-for="DonVi" class="text-danger"></span>
+        </div>
+
+        <!-- Đơn Giá Field -->
+        <div class="form-group mb-3">
+            <label asp-for="DonGia" class="form-label">Đơn Giá</label>
+            <input asp-for="DonGia" class="form-control" placeholder="Nhập đơn giá" type="number" min="0" step="0.01" required />
+            <span asp-validation-for="DonGia" class="text-danger"></span>
+        </div>
+
+        <!-- Số Lượng Tồn Field -->
+        <div class="form-group mb-3">
+            <label asp-for="SoLuongTon" class="form-label">Số Lượng</label>
+            <input asp-for="SoLuongTon" class="form-control" placeholder="Nhập số lượng" type="number" min="0" required />
+            <span asp-validation-for="SoLuongTon" class="text-danger"></span>
+        </div>
+
+        <!-- Loại Sản Phẩm Field -->
+        <div class="form-group mb-3">
+            <label asp-for="MaLoaiSanPham" class="form-label">Loại Sản Phẩm</label>
+            <select asp-for="MaLoaiSanPham" asp-items="ViewBag.MaLoaiSanPham" class="form-select" required>
+                <option value="">-- Chọn Loại Sản Phẩm --</option>
+            </select>
+            <span asp-validation-for="MaLoaiSanPham" class="text-danger"></span>
+        </div>
+
+        <!-- Hình Ảnh Field -->
+        <div class="form-group mb-3">
+            <label for="ImageFiles" class="form-label">Hình Ảnh</label>
+            <input type="file" name="ImageFiles" class="form-control" multiple />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary">Thêm</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

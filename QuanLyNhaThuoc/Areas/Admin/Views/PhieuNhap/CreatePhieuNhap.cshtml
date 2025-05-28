@@ -1,0 +1,99 @@
+﻿@model PhieuNhapViewModel
+
+<div class="container">
+    <h2>Tạo Phiếu Nhập Mới</h2>
+    <form asp-action="CreatePhieuNhap" method="post">
+        <div class="form-group">
+            <label for="MaNhanVien">Nhân Viên</label>
+            <select name="maNhanVien" class="form-control" required>
+                <option value="">-- Chọn Nhân Viên --</option>
+                @foreach (var nv in ViewBag.NhanViens)
+                {
+                    <option value="@nv.MaNhanVien">@nv.HoTen</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="TongTien">Tổng Tiền</label>
+            <input type="number" name="tongTien" id="tongTien" class="form-control" value="0" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="NgayNhap">Ngày Nhập</label>
+            <input type="date" name="ngayNhap" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="GhiChu">Ghi Chú</label>
+            <input type="text" name="ghiChu" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label for="NhaCungCap">Nhà Cung Cấp</label>
+            <input type="text" name="nhaCungCap" class="form-control" required />
+        </div>
+
+        <h3>Chi Tiết Phiếu Nhập</h3>
+        <div id="chiTietPnContainer">
+            <!-- Dùng mẫu chi tiết phiếu nhập với chỉ số động -->
+            <div class="chiTietPn-row form-group" data-index="0">
+                <label>Chi Tiết 1:</label>
+                <select name="chiTietPns[0].MaThuoc" class="form-control" required>
+                    <option value="">-- Chọn Thuốc --</option>
+                    @foreach (var t in ViewBag.Thuocs)
+                    {
+                        <option value="@t.MaThuoc">@t.TenThuoc</option>
+                    }
+                </select>
+                <input type="number" name="chiTietPns[0].SoLuong" placeholder="Số Lượng" class="form-control" required onchange="calculateTotal()" />
+                <input type="number" name="chiTietPns[0].DonGiaXuat" placeholder="Đơn Giá" class="form-control" required onchange="calculateTotal()" />
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary mt-3" onclick="addChiTietPn()">Thêm Chi Tiết</button>
+        <button type="submit" class="btn btn-primary mt-3">Tạo Phiếu Nhập</button>
+    </form>
+</div>
+
+<script>
+    // Tính tổng tiền dựa trên chi tiết
+    function calculateTotal() {
+        let total = 0;
+        const chiTietPnContainer = document.getElementById("chiTietPnContainer");
+        const details = chiTietPnContainer.querySelectorAll(".chiTietPn-row");
+
+        details.forEach((detail, index) => {
+            const soLuong = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].SoLuong']`).value) || 0;
+            const donGiaXuat = parseFloat(detail.querySelector(`input[name='chiTietPns[${index}].DonGiaXuat']`).value) || 0;
+            total += soLuong * donGiaXuat;
+        });
+
+        document.getElementById("tongTien").value = total;
+    }
+
+    // Hàm thêm chi tiết phiếu nhập
+    function addChiTietPn() {
+        const chiTietPnContainer = document.getElementById("chiTietPnContainer");
+        const newIndex = chiTietPnContainer.querySelectorAll(".chiTietPn-row").length;
+
+        const newDetail = document.createElement("div");
+        newDetail.classList.add("chiTietPn-row", "form-group");
+        newDetail.setAttribute("data-index", newIndex);
+
+        newDetail.innerHTML = `
+                <label>Chi Tiết ${newIndex + 1}:</label>
+                <select name="chiTietPns[${newIndex}].MaThuoc" class="form-control" required>
+                    <option value="">-- Chọn Thuốc --</option>
+    @foreach (var t in ViewBag.Thuocs)
+    {
+                            <option value="@t.MaThuoc">@t.TenThuoc</option>
+    }
+                </select>
+                <input type="number" name="chiTietPns[${newIndex}].SoLuong" placeholder="Số Lượng" class="form-control" required onchange="calculateTotal()" />
+                <input type="number" name="chiTietPns[${newIndex}].DonGiaXuat" placeholder="Đơn Giá Xuất" class="form-control" required onchange="calculateTotal()" />
+            `;
+
+        chiTietPnContainer.appendChild(newDetail);
+    }
+</script>

@@ -1,0 +1,73 @@
+﻿@model List<QuanLyNhaThuoc.Models.CartItem>
+
+<link href="~/css/nhanviendathangpartial.css" rel="stylesheet" />
+
+<div id="cart-container">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <table id="cart-table" class="table">
+            <thead>
+                <tr>
+                    <th style="width:580px;">Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.TenThuoc</td>
+                        <td>@item.SoLuong</td>
+                        <td>@item.DonGia₫</td>
+                        <td>@(item.SoLuong * item.DonGia)₫</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div id="cart-total">
+            <strong>Tổng tiền: </strong>
+            @ViewBag.Total₫
+        </div>
+    }
+
+    <form id="customer-info-form" action="/admin/NhanVienHoaDon/PlaceOrder" method="post">
+        <h2 class="form-title">Thông tin khách hàng</h2>
+        <div class="form-group">
+            <label for="TenKhachHang" class="form-label">Tên khách hàng:</label>
+            <input type="text" id="TenKhachHang" name="TenKhachHang" class="form-input" required />
+        </div>
+        <div class="form-group">
+            <label for="SoDienThoai" class="form-label">Số điện thoại:</label>
+            <input type="text" id="SoDienThoai" name="SoDienThoai" class="form-input" required />
+        </div>
+        <div class="form-group">
+            <label for="GioiTinh" class="form-label">Giới tính:</label>
+            <select id="GioiTinh" name="GioiTinh" class="form-select" required>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+                <option value="Khác">Khác</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="DiaChi" class="form-label">Địa chỉ</label>
+            <input type="text" id="DiaChi" name="DiaChi" class="form-input" />
+        </div>
+        <button type="submit" id="submit-button" class="btn btn-primary">Đặt hàng</button>
+    </form>
+</div>

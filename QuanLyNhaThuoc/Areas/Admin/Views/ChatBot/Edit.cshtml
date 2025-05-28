@@ -1,0 +1,68 @@
+﻿@model QuanLyNhaThuoc.Models.Faq
+
+@{
+    ViewData["Title"] = "Edit FAQ";
+}
+
+
+
+<h1>Chỉnh sửa câu hỏi thường gặp</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="MaCauHoi" />
+
+            <div class="form-group">
+                <label asp-for="CauHoiThuongGap" class="control-label">Câu Hỏi Thường Gặp</label>
+                <input asp-for="CauHoiThuongGap" class="form-control" placeholder="Nhập Câu Hỏi Thường Gặp" required />
+                <span asp-validation-for="CauHoiThuongGap" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CauTraLoiTuongUng" class="control-label">Câu Trả Lời Tương Ứng</label>
+                <input asp-for="CauTraLoiTuongUng" class="form-control" placeholder="Nhập Trả Lời Tương Ứng" required />
+                <span asp-validation-for="CauTraLoiTuongUng" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DanhMucCauHoi" class="control-label">Danh Mục Câu Hỏi</label>
+                <select asp-for="DanhMucCauHoi" class="form-control">
+                    <option value="">-- Chọn danh mục --</option>
+                    <option value="Tìm kiếm thuốc">Tìm kiếm thuốc</option>
+                    <option value="Tư vấn sức khỏe">Tư vấn sức khỏe</option>
+                    <option value="Tương tác thuốc">Tương tác thuốc</option>
+                    <option value="Câu Hỏi Khác">Câu Hỏi Khác</option>
+                    <option value="Tài khoản">Tài khoản</option>
+                    <option value="Vận chuyển">Vận chuyển</option>
+                    <option value="Đơn hàng">Đơn hàng</option>
+                    <option value="Thanh toán">Thanh toán</option>
+                    <option value="Chính sách trả hàng">Chính sách trả hàng</option>
+                    <option value="Hỗ trợ khách hàng">Hỗ trợ khách hàng</option>
+                    <option value="Khuyến mãi">Khuyến mãi</option>
+                    <option value="Thông báo">Thông báo</option>
+                    <option value="Chính sách đổi trả">Chính sách đổi trả</option>
+                </select>
+                <span asp-validation-for="DanhMucCauHoi" class="text-danger"></span>
+            </div>
+
+      
+
+            <div class="form-group">
+                <input type="submit" value="Lưu" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay Lại</a>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
